@@ -1,5 +1,6 @@
-import { useSelector } from '../../services/store';
-
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/reducers/ingredientsReducer';
 import styles from './constructor-page.module.css';
 
 import { BurgerIngredients } from '../../components';
@@ -9,11 +10,24 @@ import { FC } from 'react';
 
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */
-  const isIngredientsLoading = false;
+  const dispatch = useDispatch();
+  // Получение данных из Redux
+  const {
+    isLoading,
+    items: ingredients,
+    error
+  } = useSelector((state) => state.ingredients);
+
+  // Запрос ингредиентов при монтировании компонента
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
+  //const isIngredientsLoading = false;
 
   return (
     <>
-      {isIngredientsLoading ? (
+      {isLoading ? (
         <Preloader />
       ) : (
         <main className={styles.containerMain}>
