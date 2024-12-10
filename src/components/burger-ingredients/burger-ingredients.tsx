@@ -1,14 +1,26 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
+import styles from '../../pages/constructor-page/constructor-page.module.css';
+import { useSelector } from '../../services/store';
 
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
+import { BurgerConstructor } from '../burger-constructor';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
-  const buns: any = [];
-  const mains: any = [];
-  const sauces: any = [];
+  const {
+    isLoading,
+    items: ingredients,
+    error
+  } = useSelector((state) => state.ingredients);
+
+  //const isIngredientsLoading = false;
+  const buns = ingredients.filter((ingredient) => ingredient.type === 'bun');
+  const mains = ingredients.filter((ingredient) => ingredient.type === 'main');
+  const sauces = ingredients.filter(
+    (ingredient) => ingredient.type === 'sauce'
+  );
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -47,21 +59,33 @@ export const BurgerIngredients: FC = () => {
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  //  return null;
-
   return (
-    <BurgerIngredientsUI
-      currentTab={currentTab}
-      buns={buns}
-      mains={mains}
-      sauces={sauces}
-      titleBunRef={titleBunRef}
-      titleMainRef={titleMainRef}
-      titleSaucesRef={titleSaucesRef}
-      bunsRef={bunsRef}
-      mainsRef={mainsRef}
-      saucesRef={saucesRef}
-      onTabClick={onTabClick}
-    />
+    <main className={styles.containerMain}>
+      <h1
+        className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
+      >
+        Соберите бургер
+      </h1>
+      <div className={`${styles.main} pl-5 pr-5`}>
+        {error ? (
+          <div className='error-message'>Ошибка загрузки: {error}</div>
+        ) : (
+          <BurgerIngredientsUI
+            currentTab={currentTab}
+            buns={buns}
+            mains={mains}
+            sauces={sauces}
+            titleBunRef={titleBunRef}
+            titleMainRef={titleMainRef}
+            titleSaucesRef={titleSaucesRef}
+            bunsRef={bunsRef}
+            mainsRef={mainsRef}
+            saucesRef={saucesRef}
+            onTabClick={onTabClick}
+          />
+        )}
+        <BurgerConstructor />
+      </div>
+    </main>
   );
 };
