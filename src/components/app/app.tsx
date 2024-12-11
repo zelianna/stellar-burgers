@@ -3,8 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
-  useLocation
+  Navigate
 } from 'react-router-dom';
 import {
   ConstructorPage,
@@ -28,14 +27,11 @@ const ProtectedRoute = ({
 }: {
   element: React.ElementType;
 }) => {
-  const isAuthenticated = false; // Добавьте вашу логику аутентификации
+  const isAuthenticated = false;
   return isAuthenticated ? <Component {...rest} /> : <Navigate to='/login' />;
 };
 
 const App = () => {
-  const location = useLocation();
-  const state = location.state as { backgroundLocation?: Location };
-
   const handleCloseModal = () => {
     window.history.back();
   };
@@ -61,12 +57,7 @@ const App = () => {
           path='/profile/orders'
           element={<ProtectedRoute element={ProfileOrders} />}
         />
-        <Route path='/ingredients/:id' element={<IngredientDetails />} />
-        <Route path='*' element={<NotFound404 />} />
-      </Routes>
-      {/* Роутинг для модальных окон */}
-      {state?.backgroundLocation && (
-        <Routes>
+        <>
           <Route
             path='/feed/:number'
             element={
@@ -78,7 +69,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='Ingredient Details' onClose={handleCloseModal}>
+              <Modal title={IngredientDetails.name} onClose={handleCloseModal}>
                 <IngredientDetails />
               </Modal>
             }
@@ -91,8 +82,9 @@ const App = () => {
               </Modal>
             }
           />
-        </Routes>
-      )}
+        </>
+        <Route path='*' element={<NotFound404 />} />
+      </Routes>
     </div>
   );
 };

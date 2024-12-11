@@ -17,7 +17,7 @@ export const Modal: FC<TModalProps> = memo(({ title, onClose, children }) => {
       document.removeEventListener('keydown', handleEsc);
     };
   }, [onClose]);
-
+  console.log('>>> modal');
   return ReactDOM.createPortal(
     <ModalUI title={title} onClose={onClose}>
       {children}
