@@ -10,16 +10,12 @@ export const BurgerConstructor: FC = () => {
   const ingredients = useSelector(
     (state) => state.burgerConstructor.ingredients
   );
-  // Объединение данных
+
   const constructorItems = {
     bun,
     ingredients
   };
-  /* 
-  const constructorItems = {
-    ingredients: []
-  } as { bun?: any; ingredients: any[] };
- */
+
   const orderRequest = false;
 
   const orderModalData = null;
@@ -38,8 +34,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
-  //  return null;
 
   return (
     <BurgerConstructorUI

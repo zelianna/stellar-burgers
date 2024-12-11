@@ -13,10 +13,6 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
     const location = useLocation();
     const dispatch = useDispatch();
 
-    /*const handleAdd = () => {
-      console.log(ingredient);
-    };*/
-
     const handleAdd = () => {
       if (ingredient.type === 'bun') {
         // Если это булка, заменяем текущую
