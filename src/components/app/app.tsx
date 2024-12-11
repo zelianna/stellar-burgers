@@ -18,7 +18,6 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
 
 const ProtectedRoute = ({
@@ -69,7 +68,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title={IngredientDetails.name} onClose={handleCloseModal}>
+              <Modal title='Детали ингридиента' onClose={handleCloseModal}>
                 <IngredientDetails />
               </Modal>
             }
