@@ -8,7 +8,7 @@ import {
   Logo,
   ProfileIcon
 } from '@zlden/react-developer-burger-ui-components';
-const activeNavLink = `${styles.link} text text_type_main-default ${styles.active} pt-4 pr-5 pb-4 pl-5`;
+const activeNavLink = `${styles.link} text text_type_main-default ${styles.link_active} pt-4 pr-5 pb-4 pl-5`;
 const inactiveNavLink = `${styles.link} text text_type_main-default text_color_inactive pt-4 pr-5 pb-4 pl-5`;
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
