@@ -21,7 +21,6 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
 
     // Получаем количество этого ингредиента из counts
     const count = counts[ingredient._id];
-    console.log('count: ', count);
 
     const handleAdd = () => {
       if (ingredient.type === 'bun') {
