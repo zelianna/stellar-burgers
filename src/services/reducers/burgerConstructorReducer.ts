@@ -7,11 +7,13 @@ interface Ingredient {
 interface BurgerConstructorState {
   bun: Ingredient | null;
   ingredients: Ingredient[];
+  counts: Record<string, number>;
 }
 
 const initialState: BurgerConstructorState = {
   bun: null,
-  ingredients: []
+  ingredients: [],
+  counts: {}
 };
 
 const burgerConstructorReducer = (state = initialState, action: any) => {
@@ -19,20 +21,45 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
     case 'SET_BUN':
       return {
         ...state,
-        bun: action.payload // Заменить текущую булку
+        bun: action.payload, // Заменить текущую булку
+        counts: {
+          ...state.counts,
+          [action.payload._id]: 2 // Булка добавляется дважды (верх и низ)
+        }
       };
     case 'ADD_INGREDIENT':
+      const ingredient = action.payload;
+
       return {
         ...state,
-        ingredients: [...state.ingredients, action.payload] // Добавить новый ингредиент
+        ingredients: [...state.ingredients, action.payload], // Добавить новый ингредиент
+        counts: {
+          ...state.counts,
+          [ingredient._id]: (state.counts[ingredient._id] || 0) + 1
+        }
       };
-    case 'REMOVE_INGREDIENT':
+    case 'REMOVE_INGREDIENT': {
+      const index = action.payload;
+      const ingredient = state.ingredients.find((_, i) => i === index);
+      if (!ingredient) {
+        throw 'Unknown ingredient attempted to be deleted';
+      }
+      const _id = ingredient._id;
+
+      const newCounts = { ...state.counts };
+      if (newCounts[_id] > 1) {
+        newCounts[_id] -= 1; // Уменьшить счетчик
+      } else {
+        delete newCounts[_id]; // Удалить запись, если счетчик становится 0
+      }
+
       return {
         ...state,
-        ingredients: state.ingredients.filter(
-          (ingredient) => ingredient._id !== action.payload // Удалить ингредиент по id
-        )
+        ingredients: state.ingredients.filter((_, i) => i !== index),
+        counts: newCounts
       };
+    }
+
     default:
       return state;
   }
@@ -48,9 +75,9 @@ export const addIngredient = (ingredient: any) => ({
   payload: ingredient
 });
 
-export const removeIngredient = (_id: string) => ({
+export const removeIngredient = (index: number) => ({
   type: 'REMOVE_INGREDIENT',
-  payload: _id
+  payload: index
 });
 
 export default burgerConstructorReducer;

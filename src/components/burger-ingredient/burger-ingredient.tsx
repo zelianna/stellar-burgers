@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from '../../services/store';
+import { RootState } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import {
   addIngredient,
   setBun
@@ -9,9 +10,18 @@ import { BurgerIngredientUI } from '@ui';
 import { TBurgerIngredientProps } from './type';
 
 export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
-  ({ ingredient, count }) => {
+  ({ ingredient }) => {
     const location = useLocation();
     const dispatch = useDispatch();
+    // Получение count из глобального состояния
+    const counts = useSelector(
+      (state: RootState): Record<string, number> =>
+        state.burgerConstructor.counts
+    );
+
+    // Получаем количество этого ингредиента из counts
+    const count = counts[ingredient._id];
+    console.log('count: ', count);
 
     const handleAdd = () => {
       if (ingredient.type === 'bun') {
