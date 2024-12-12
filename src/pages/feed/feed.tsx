@@ -3,6 +3,7 @@ import { FeedUI } from '@ui-pages';
 import { TOrder } from '@utils-types';
 import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchIngredients } from '../../services/reducers/ingredientsReducer';
 import { fetchFeed } from '../../services/reducers/feedReducer';
 import { RootState, AppDispatch } from '../../services/store';
 
@@ -16,6 +17,7 @@ export const Feed: FC = () => {
 
   useEffect(() => {
     dispatch(fetchFeed());
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   if (loading) {

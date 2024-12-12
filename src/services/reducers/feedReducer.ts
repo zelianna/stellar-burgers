@@ -8,7 +8,7 @@ export const fetchFeed = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const data = await getFeedsApi(); // Используем вашу API функцию для получения данных
-      return data.orders; // Возвращаем только список заказов
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error); // Если ошибка, отклоняем
     }
@@ -18,12 +18,16 @@ export const fetchFeed = createAsyncThunk(
 // Определяем начальное состояние
 interface FeedState {
   orders: TOrder[];
+  total: number;
+  totalToday: number;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: FeedState = {
   orders: [],
+  total: 0,
+  totalToday: 0,
   loading: false,
   error: null
 };
@@ -43,7 +47,9 @@ const feedSlice = createSlice({
       // Успех — данные успешно получены
       .addCase(fetchFeed.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
+        state.orders = action.payload.orders;
+        state.total = action.payload.total;
+        state.totalToday = action.payload.totalToday;
       })
       // Ошибка — если запрос не удался
       .addCase(fetchFeed.rejected, (state, action) => {
