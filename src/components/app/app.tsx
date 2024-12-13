@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate
+  Navigate,
+  useLocation
 } from 'react-router-dom';
 import {
   ConstructorPage,
@@ -18,7 +19,11 @@ import {
 } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../services/store';
 import { AppHeader, Modal, IngredientDetails, OrderInfo } from '@components';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const ProtectedRoute = ({
   element: Component,
@@ -26,7 +31,11 @@ const ProtectedRoute = ({
 }: {
   element: React.ElementType;
 }) => {
-  const isAuthenticated = false;
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  // Если пользователь не авторизован, перенаправляем его на страницу логина
   return isAuthenticated ? <Component {...rest} /> : <Navigate to='/login' />;
 };
 
@@ -34,6 +43,15 @@ const App = () => {
   const handleCloseModal = () => {
     window.history.back();
   };
+
+  const location = useLocation();
+  const [currentNumber, setCurrentNumber] = useState<string | undefined>('0');
+  useEffect(() => {
+    const number = location.pathname.split('/').pop();
+    setCurrentNumber(number);
+  }, [location.pathname]);
+
+  const title = 'Детали заказа #' + currentNumber;
 
   return (
     <div className={styles.app}>
@@ -60,7 +78,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Order Information' onClose={handleCloseModal}>
+              <Modal title={title} onClose={handleCloseModal}>
                 <OrderInfo />
               </Modal>
             }
