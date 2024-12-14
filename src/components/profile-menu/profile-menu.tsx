@@ -12,12 +12,22 @@ export const ProfileMenu: FC = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
 
+  // Функция для выхода
   const handleLogout = async () => {
     try {
-      // Вызываем Thunk для выхода
-      await dispatch(logoutUser()).unwrap();
-      console.log('>>>>> Выход успех');
-      navigate('/login');
+      // Ожидаем, пока запрос на выход завершится
+      const resultAction = await dispatch(logoutUser());
+
+      // Если запрос прошел успешно
+      if (logoutUser.fulfilled.match(resultAction)) {
+        console.log('Выход успешен');
+
+        // Перенаправляем пользователя на страницу входа
+        navigate('/login');
+      } else {
+        // В случае ошибки
+        console.error('Ошибка при выходе:', resultAction.payload);
+      }
     } catch (error) {
       console.error('Ошибка при выходе:', error);
     }

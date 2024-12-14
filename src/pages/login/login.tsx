@@ -36,7 +36,6 @@ export const Login: FC = () => {
     dispatch(loginUser({ email, password }))
       .then((result: any) => {
         if (loginUser.fulfilled.match(result)) {
-          console.log('>>>>>>Успех', errorText);
           navigate('/');
         } else {
           setErrorText(result.payload as string);

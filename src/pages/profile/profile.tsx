@@ -5,12 +5,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../services/store';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  /* const user = {
-    name: '',
-    email: ''
-  }; */
-  // Берем данные пользователя из стора
   const user = useSelector((state: RootState) => state.auth.user);
 
   const [formValue, setFormValue] = useState({
@@ -63,6 +57,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  //return null;
 };

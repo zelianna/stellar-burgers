@@ -49,6 +49,8 @@ export const loginUser = createAsyncThunk(
   ) => {
     try {
       const response = await loginUserApi(loginData);
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
       return response.user; // Возвращаем данные пользователя
     } catch (error) {
       return rejectWithValue('Ошибка авторизации. Проверьте введённые данные.');
