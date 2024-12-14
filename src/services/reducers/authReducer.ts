@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUserApi, loginUserApi } from '../../utils/burger-api';
+import {
+  registerUserApi,
+  loginUserApi,
+  logoutApi
+} from '../../utils/burger-api';
 
 // Типы данных
 interface AuthState {
@@ -93,6 +97,29 @@ const authSlice = createSlice({
       });
   }
 });
+
+// Thunk для выхода
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Отправляем запрос на сервер для выхода
+      const response = await logoutApi();
+
+      if (!response.success) {
+        throw new Error('Ошибка выхода');
+      }
+
+      // Удаляем токены из localStorage
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+
+      return true;
+    } catch (error) {
+      return rejectWithValue(error || 'Ошибка выхода');
+    }
+  }
+);
 
 // Экспортируем действия и редьюсер
 export const { logout } = authSlice.actions;
