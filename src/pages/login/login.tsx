@@ -37,7 +37,7 @@ export const Login: FC = () => {
       .then((result: any) => {
         if (loginUser.fulfilled.match(result)) {
           console.log('>>>>>>Успех', errorText);
-          navigate('/profile');
+          navigate('/');
         } else {
           setErrorText(result.payload as string);
         }
