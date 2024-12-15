@@ -60,6 +60,10 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
       };
     }
 
+    // Очистка конструктора
+    case 'CLEAR_CONSTRUCTOR':
+      return initialState;
+
     default:
       return state;
   }
@@ -78,6 +82,10 @@ export const addIngredient = (ingredient: any) => ({
 export const removeIngredient = (index: number) => ({
   type: 'REMOVE_INGREDIENT',
   payload: index
+});
+
+export const clearConstructor = () => ({
+  type: 'CLEAR_CONSTRUCTOR'
 });
 
 export default burgerConstructorReducer;

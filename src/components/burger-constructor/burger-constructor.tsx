@@ -5,7 +5,7 @@ import { orderBurgerApi } from '../../utils/burger-api';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector, useDispatch } from '../../services/store';
 import { TOrder } from '../../utils/types';
-//import { clearConstructor } from '../../services/reducers/burgerConstructorReducer';
+import { clearConstructor } from '../../services/reducers/burgerConstructorReducer';
 
 import { useState } from 'react';
 export const BurgerConstructor: FC = () => {
@@ -53,7 +53,7 @@ export const BurgerConstructor: FC = () => {
       console.log('Успех при оформлении заказа. Response: ', response.order);
       // Успешный запрос: отображаем модальное окно с заказом
       setOrderModalData(response.order);
-      //dispatch(clearConstructor()); // Очищаем конструктор
+      dispatch(clearConstructor());
     } catch (error) {
       console.error('Ошибка при оформлении заказа:', error);
     } finally {
