@@ -12,11 +12,18 @@ export const OrderInfo: FC = () => {
     return <div>Ошибка: номер заказа не указан</div>;
   }
 
-  const orderData = useSelector((state: RootState) =>
-    state.orders.userOrders.find(
-      (order) => order.number === parseInt(number, 10)
-    )
-  );
+  const orderData = useSelector((state: RootState) => {
+    console.log('>>> state:', state);
+    if (state.feed.orders && state.feed.orders.length) {
+      return state.feed.orders.find(
+        (order) => order.number === parseInt(number, 10)
+      );
+    } else {
+      return state.orders.userOrders.find(
+        (order) => order.number === parseInt(number, 10)
+      );
+    }
+  });
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.items
   );

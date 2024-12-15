@@ -54,14 +54,15 @@ const App = () => {
   };
 
   const location = useLocation();
-  const backgroundLocation = location.state?.background.pathname;
+  const backgroundLocation = location.state
+    ? location.state?.background.pathname
+    : true;
 
   const [currentNumber, setCurrentNumber] = useState<string | undefined>('0');
   useEffect(() => {
     const number = location.pathname.split('/').pop();
     setCurrentNumber(number);
   }, [location.pathname, isAuthenicated]);
-
   const title = 'Детали заказа #' + currentNumber;
   return (
     <div className={styles.app}>
@@ -70,6 +71,29 @@ const App = () => {
       ) : (
         <>
           <AppHeader />
+          <Routes>
+            <Route path='/' element={<ConstructorPage />} />
+            <Route path='/feed' element={<Feed />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/reset-password' element={<ResetPassword />} />
+            <Route
+              path='/profile'
+              element={<ProtectedRoute element={Profile} />}
+            />
+            <Route path='/ingredients/:id' element={<ConstructorPage />} />
+            <Route path='/feed/:number' element={<Feed />} />
+            <Route
+              path='/profile/orders'
+              element={<ProtectedRoute element={ProfileOrders} />}
+            />
+            <Route
+              path='/profile/orders/:number'
+              element={<ProtectedRoute element={ProfileOrders} />}
+            />
+            <Route path='*' element={<NotFound404 />} />
+          </Routes>
           {backgroundLocation && (
             <Routes>
               <Route
@@ -98,29 +122,6 @@ const App = () => {
               />
             </Routes>
           )}
-          <Routes>
-            <Route path='/' element={<ConstructorPage />} />
-            <Route path='/feed' element={<Feed />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/reset-password' element={<ResetPassword />} />
-            <Route
-              path='/profile'
-              element={<ProtectedRoute element={Profile} />}
-            />
-            <Route path='/ingredients/:id' element={<ConstructorPage />} />
-            <Route path='/feed/:number' element={<Feed />} />
-            <Route
-              path='/profile/orders'
-              element={<ProtectedRoute element={ProfileOrders} />}
-            />
-            <Route
-              path='/profile/orders/:number'
-              element={<ProtectedRoute element={ProfileOrders} />}
-            />
-            <Route path='*' element={<NotFound404 />} />
-          </Routes>
         </>
       )}
     </div>
