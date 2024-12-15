@@ -4,6 +4,7 @@ import { TOrder } from '@utils-types';
 import { FC } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { fetchUserOrders } from '../../services/reducers/ordersReducer';
+import { fetchIngredients } from '../../services/reducers/ingredientsReducer';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ export const ProfileOrders: FC = () => {
 
   useEffect(() => {
     dispatch(fetchUserOrders());
+    dispatch(fetchIngredients());
   }, [dispatch]);
 
   return <ProfileOrdersUI orders={orders} />;

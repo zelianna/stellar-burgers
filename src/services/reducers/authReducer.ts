@@ -2,7 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   registerUserApi,
   loginUserApi,
-  logoutApi
+  logoutApi,
+  getUserApi
 } from '../../utils/burger-api';
 
 // Типы данных
@@ -19,7 +20,7 @@ interface AuthState {
 // Начальное состояние
 const initialState: AuthState = {
   user: null,
-  loading: false,
+  loading: true,
   error: null,
   isAuthenticated: false
 };
@@ -40,7 +41,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Thunk для авторизации
+// Thunk для аутентификации
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (
@@ -51,6 +52,19 @@ export const loginUser = createAsyncThunk(
       const response = await loginUserApi(loginData);
       localStorage.setItem('accessToken', response.accessToken);
       localStorage.setItem('refreshToken', response.refreshToken);
+      return response.user; // Возвращаем данные пользователя
+    } catch (error) {
+      return rejectWithValue('Ошибка авторизации. Проверьте введённые данные.');
+    }
+  }
+);
+
+// Thunk для авторизации
+export const getUser = createAsyncThunk(
+  'auth/user',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserApi();
       return response.user; // Возвращаем данные пользователя
     } catch (error) {
       return rejectWithValue('Ошибка авторизации. Проверьте введённые данные.');
@@ -95,6 +109,24 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getUser.pending, (state, action) => {
+        state.loading = true;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
         state.error = action.payload as string;
       });
   }

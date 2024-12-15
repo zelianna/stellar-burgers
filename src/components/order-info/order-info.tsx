@@ -7,27 +7,15 @@ import { useParams } from 'react-router-dom';
 import { RootState } from '../../services/store';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  /*   const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
-
-  const ingredients: TIngredient[] = []; */
-
-  const { number } = useParams<{ number: string }>(); // Получаем ID заказа
-  // Если number undefined, обработка ошибки
+  const { number } = useParams<{ number: string }>();
   if (!number) {
     return <div>Ошибка: номер заказа не указан</div>;
   }
 
   const orderData = useSelector((state: RootState) =>
-    state.feed.orders.find((order) => order.number === parseInt(number, 10))
+    state.orders.userOrders.find(
+      (order) => order.number === parseInt(number, 10)
+    )
   );
   const ingredients = useSelector(
     (state: RootState) => state.ingredients.items
@@ -74,7 +62,6 @@ export const OrderInfo: FC = () => {
       total
     };
   }, [orderData, ingredients]);
-
   if (!orderInfo) {
     return <Preloader />;
   }
