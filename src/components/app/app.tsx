@@ -61,14 +61,8 @@ const App = () => {
         <Route path='/feed' element={<Feed />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route
-          path='/forgot-password'
-          element={<ProtectedRoute element={ForgotPassword} />}
-        />
-        <Route
-          path='/reset-password'
-          element={<ProtectedRoute element={ResetPassword} />}
-        />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile' element={<ProtectedRoute element={Profile} />} />
         <Route
           path='/profile/orders'
