@@ -50,7 +50,7 @@ export const BurgerConstructor: FC = () => {
     try {
       setOrderRequest(true);
       const response = await orderBurgerApi(ingredientIds);
-      console.log('Успех при оформлении заказа. Response: ', response.order);
+      //console.log('Успех при оформлении заказа. Response: ', response.order);
       // Успешный запрос: отображаем модальное окно с заказом
       setOrderModalData(response.order);
       dispatch(clearConstructor());

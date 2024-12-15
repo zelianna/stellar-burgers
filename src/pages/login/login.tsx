@@ -16,12 +16,10 @@ export const Login: FC = () => {
   const validateFields = (): boolean => {
     if (!email.includes('@') || !email.includes('.')) {
       setErrorText('Введите корректный email');
-      console.log('>>>>>>', errorText);
       return false;
     }
     if (!password.trim()) {
       setErrorText('Пароль не может быть пустым');
-      console.log('>>>>>>', errorText);
       return false;
     }
     return true;

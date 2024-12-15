@@ -54,7 +54,7 @@ export const fetchIngredients = () => async (dispatch: AppDispatch) => {
   dispatch(fetchIngredientsStart());
   try {
     const ingredients = await getIngredientsApi();
-    console.log('Fetched ingredients:', ingredients);
+    //console.log('Fetched ingredients:', ingredients);
     dispatch(fetchIngredientsSuccess(ingredients)); // Успех
   } catch (error: any) {
     console.error('Error fetching ingredients:', error.message);

@@ -20,7 +20,7 @@ export const ProfileMenu: FC = () => {
 
       // Если запрос прошел успешно
       if (logoutUser.fulfilled.match(resultAction)) {
-        console.log('Выход успешен');
+        //console.log('Выход успешен');
 
         // Перенаправляем пользователя на страницу входа
         navigate('/login');
