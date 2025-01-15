@@ -2,20 +2,31 @@ import { FC, useMemo } from 'react';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { RootState } from '../../services/store';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
-  const orderData = {
-    createdAt: '',
-    ingredients: [],
-    _id: '',
-    status: '',
-    name: '',
-    updatedAt: 'string',
-    number: 0
-  };
+  const { number } = useParams<{ number: string }>();
+  if (!number) {
+    return <div>Ошибка: номер заказа не указан</div>;
+  }
 
-  const ingredients: TIngredient[] = [];
+  const orderData = useSelector((state: RootState) => {
+    console.log('>>> state:', state);
+    if (state.feed.orders && state.feed.orders.length) {
+      return state.feed.orders.find(
+        (order) => order.number === parseInt(number, 10)
+      );
+    } else {
+      return state.orders.userOrders.find(
+        (order) => order.number === parseInt(number, 10)
+      );
+    }
+  });
+  const ingredients = useSelector(
+    (state: RootState) => state.ingredients.items
+  );
 
   /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
@@ -58,7 +69,6 @@ export const OrderInfo: FC = () => {
       total
     };
   }, [orderData, ingredients]);
-
   if (!orderInfo) {
     return <Preloader />;
   }
