@@ -48,4 +48,43 @@ describe('ingredient modal works correctly', () => {
       cy.get('[class^="modal"]').should('not.exist'); 
     });
   });
+
+  describe('Order modal works correctly', () => {
+    beforeEach(() => {
+      cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
+      cy.intercept('GET', '/api/auth/user', { fixture: 'user.json' });
+      cy.intercept('POST', '/api/orders', { fixture: 'order.json' });
+      cy.visit('http://localhost:4000');
+    });
   
+    it('should create order and clear constructor', () => {
+      // Добавление булки
+      cy.contains('Краторная булка N-200i').parents('li').find('button').click();
+  
+      // Добавление ингредиента
+      cy.contains('Биокотлета из марсианской Магнолии')
+        .parents('li')
+        .find('button')
+        .click();
+  
+      // Проверка, что ингредиенты добавлены
+      cy.get('[class^="constructor-element"]').contains('Краторная булка N-200i').should('exist');
+      cy.get('[class^="constructor-element"]').contains('Биокотлета из марсианской Магнолии').should('exist');
+  
+      // Клик на кнопку "Оформить заказ"
+      cy.get('button').contains('Оформить заказ').click();
+  
+      // Проверка открытия модального окна с номером заказа
+      cy.get('#modals').should('exist');
+      cy.get('#modals').contains('Ваш заказ начали готовить').should('exist');
+      cy.get('#modals').contains('65833').should('exist'); // Проверка номера заказа
+  
+      // Закрытие модального окна
+      cy.get('[data-cy="close-button"]').click();
+      cy.get('#modals').should('not.be.visible');
+  
+      // Проверка, что конструктор пуст
+      cy.get('[class^="constructor-element"]').should('not.exist');
+    });
+  });
+    
