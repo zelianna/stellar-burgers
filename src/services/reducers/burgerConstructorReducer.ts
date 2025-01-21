@@ -19,6 +19,19 @@ const initialState: BurgerConstructorState = {
 const burgerConstructorReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case 'SET_BUN':
+      if (state.bun && state.bun._id) {
+        const counts: Record<string, number> = {
+          ...state.counts,
+          [action.payload._id]: 2
+        };
+        delete counts[state.bun._id as string];
+        return {
+          ...state,
+          bun: action.payload,
+          counts
+        };
+      }
+
       return {
         ...state,
         bun: action.payload, // Заменить текущую булку
@@ -60,6 +73,25 @@ const burgerConstructorReducer = (state = initialState, action: any) => {
       };
     }
 
+    // Обработка изменения порядка ингредиентов
+    case 'REORDER_INGREDIENTS': {
+      //console.log('Current state:', state.ingredients);
+      //console.log('Action payload:', action.payload);
+
+      const { fromIndex, toIndex } = action.payload;
+      const ingredients = [...state.ingredients];
+      const [movedIngredient] = ingredients.splice(fromIndex, 1); // Убираем элемент
+      //console.log('Moved ingredient:', movedIngredient);
+
+      ingredients.splice(toIndex, 0, movedIngredient); // Вставляем на новое место
+      //console.log('New ingredients order:', ingredients);
+
+      return {
+        ...state,
+        ingredients
+      };
+    }
+
     // Очистка конструктора
     case 'CLEAR_CONSTRUCTOR':
       return initialState;
@@ -86,6 +118,11 @@ export const removeIngredient = (index: number) => ({
 
 export const clearConstructor = () => ({
   type: 'CLEAR_CONSTRUCTOR'
+});
+
+export const reorderIngredients = (fromIndex: number, toIndex: number) => ({
+  type: 'REORDER_INGREDIENTS',
+  payload: { fromIndex, toIndex }
 });
 
 export default burgerConstructorReducer;

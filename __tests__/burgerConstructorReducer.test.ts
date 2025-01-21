@@ -71,5 +71,36 @@ import burgerConstructorReducer, {
   
       expect(state).toEqual(initialState);
     });
+    
+    it('should handle reordering ingredients', () => {
+      const initialStateWithIngredients = {
+        ...initialState,
+        ingredients: [
+          { _id: '1', name: 'Tomato', price: 1, image: 'tomato.jpg' },
+          { _id: '2', name: 'Lettuce', price: 2, image: 'lettuce.jpg' },
+          { _id: '3', name: 'Cheese', price: 3, image: 'cheese.jpg' },
+        ],
+      };
+    
+      const action = {
+        type: 'REORDER_INGREDIENTS',
+        payload: { fromIndex: 0, toIndex: 2 },
+      };
+    
+      const state = burgerConstructorReducer(initialStateWithIngredients, action);
+    
+      const expectedState = {
+        ...initialStateWithIngredients,
+        ingredients: [
+          { _id: '2', name: 'Lettuce', price: 2, image: 'lettuce.jpg' },
+          { _id: '3', name: 'Cheese', price: 3, image: 'cheese.jpg' },
+          { _id: '1', name: 'Tomato', price: 1, image: 'tomato.jpg' },
+        ],
+      };
+    
+      expect(state).toEqual(expectedState);
+    });
+    
+
   });
   
