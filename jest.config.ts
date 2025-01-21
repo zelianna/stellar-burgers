@@ -195,6 +195,16 @@ const config: Config = {
   // Whether to use watchman for file crawling
   // watchman: true,
 
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}', // Только файлы TypeScript/TSX
+    '!src/**/*.d.ts',    // Исключить декларации типов
+    '!src/**/index.ts',  // Исключить индексные файлы
+    '!src/**/*.{test,spec}.{ts,tsx}', // Исключить файлы тестов
+    '!src/**/styles.d.ts', // Исключить файлы стилей
+    '!src/**/*.svg.d.ts',  // Исключить SVG декларации
+  ],
+  coverageReporters: ['text', 'lcov', 'json', 'html'],
+
   preset: 'ts-jest'
 
 };
