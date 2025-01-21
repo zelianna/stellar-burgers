@@ -54,9 +54,22 @@ describe('ingredient modal works correctly', () => {
       cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
       cy.intercept('GET', '/api/auth/user', { fixture: 'user.json' });
       cy.intercept('POST', '/api/orders', { fixture: 'order.json' });
+
+      window.localStorage.setItem(
+        'refreshToken',
+        JSON.stringify('test-refreshToken')
+      );
+      cy.setCookie('accessToken', 'test-accessToken'); 
+
       cy.visit('http://localhost:4000');
     });
+
+     afterEach(function () {
+      cy.clearLocalStorage();
+      cy.clearCookies();
+    }); 
   
+
     it('should create order and clear constructor', () => {
       // Добавление булки
       cy.contains('Краторная булка N-200i').parents('li').find('button').click();
