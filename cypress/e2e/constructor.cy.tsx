@@ -2,7 +2,7 @@
 describe('add bun ingredient to constructor works correctly', () => {
     beforeEach(() => {
       cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-      cy.visit('http://localhost:4000');
+      cy.visit('/');
     });
   
     it('should add bun', () => {
@@ -18,7 +18,7 @@ describe('add bun ingredient to constructor works correctly', () => {
 describe('ingredient modal works correctly', () => {
     beforeEach(() => {
       cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
-      cy.visit('http://localhost:4000');
+      cy.visit('/');
     });
   
     it('should work open and close ingredient modal', () => {
@@ -61,7 +61,7 @@ describe('ingredient modal works correctly', () => {
       );
       cy.setCookie('accessToken', 'test-accessToken'); 
 
-      cy.visit('http://localhost:4000');
+      cy.visit('/');
     });
 
      afterEach(function () {

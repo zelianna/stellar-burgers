@@ -1,16 +1,12 @@
 import ingredientsReducer, {
+    initialState,
     fetchIngredientsStart,
     fetchIngredientsSuccess,
     fetchIngredientsFailure,
   } from '../src/services/reducers/ingredientsReducer';
   
   describe('ingredientsReducer async actions', () => {
-    const initialState = {
-      items: [],
-      isLoading: false,
-      error: null,
-    };
-  
+      
     const mockIngredients = [
       {
         _id: '1',

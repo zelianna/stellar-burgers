@@ -10,7 +10,7 @@ interface BurgerConstructorState {
   counts: Record<string, number>;
 }
 
-const initialState: BurgerConstructorState = {
+export const initialState: BurgerConstructorState = {
   bun: null,
   ingredients: [],
   counts: {}

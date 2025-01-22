@@ -1,15 +1,11 @@
 import burgerConstructorReducer, {
+    initialState,
     addIngredient,
     removeIngredient,
     clearConstructor,
   } from '../src/services/reducers/burgerConstructorReducer';
   
   describe('burgerConstructorReducer', () => {
-    const initialState = {
-      bun: null,
-      ingredients: [],
-      counts: {},
-    };
   
     const mockBun = { _id: '1', name: 'Bun', price: 5, image: 'bun.jpg' };
     const mockIngredient = { _id: '2', name: 'Lettuce', price: 2, image: 'lettuce.jpg' };
