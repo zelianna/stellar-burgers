@@ -78,6 +78,10 @@ describe('ingredient modal works correctly', () => {
   
 
     it('should create order and clear constructor', () => {
+
+      // Перехват запроса на создание заказа
+      cy.intercept('POST', '/api/orders', { fixture: 'order.json' }).as('createOrder');
+
       // Добавление булки
       cy.contains('Краторная булка N-200i').parents('li').find('button').click();
   
@@ -93,6 +97,20 @@ describe('ingredient modal works correctly', () => {
   
       // Клик на кнопку "Оформить заказ"
       cy.get('button').contains('Оформить заказ').click();
+
+      // Ожидание завершения перехваченного запроса
+      cy.wait('@createOrder').then((interception) => {
+
+      if (!interception || !interception.response) {
+          throw new Error('Response from intercepted request is undefined');
+      }        
+
+      // Проверка тела ответа
+      expect(interception.response.statusCode).to.equal(200); 
+      expect(interception.response.body).to.have.property('order').and.to.be.an('object');
+      expect(interception.response.body.order).to.have.property('number', 65833); // Проверка номера заказа
+      });
+
   
       // Проверка открытия модального окна с номером заказа
       cy.get(modalsSelector).should('exist');
