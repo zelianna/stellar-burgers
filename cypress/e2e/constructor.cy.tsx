@@ -1,4 +1,11 @@
 /// <reference types="cypress" />
+
+const constructorElementSelector = '[class^="constructor-element"]';
+const modalsSelector = '#modals'; 
+const closeButtonSelector = '[data-cy="close-button"]';
+const overlaySelector = '[data-cy="overlay"]';
+
+
 describe('add bun ingredient to constructor works correctly', () => {
     beforeEach(() => {
       cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' });
@@ -10,7 +17,7 @@ describe('add bun ingredient to constructor works correctly', () => {
       cy.contains('Краторная булка N-200i').parents('li').find('button').click();
   
       // Проверка, что булка добавлена в конструктор
-      cy.get('[class^="constructor-element"]').contains('Краторная булка N-200i').should('exist');
+      cy.get(constructorElementSelector).contains('Краторная булка N-200i').should('exist');
   
     });
   });
@@ -27,11 +34,11 @@ describe('ingredient modal works correctly', () => {
       cy.contains('Детали ингредиента').should('exist');
       
       // Проверка, что в модалке нужный ингредиент
-      cy.get('#modals').contains('Краторная булка N-200i').should('exist');
+      cy.get(modalsSelector).contains('Краторная булка N-200i').should('exist');
       
       // Закрытие модального окна по крестику
-      cy.get('[data-cy="close-button"]').click();
-      cy.get('#modals').should('not.be.visible');
+      cy.get(closeButtonSelector).click();
+      cy.get(modalsSelector).should('not.be.visible');
 
     });
   
@@ -40,11 +47,11 @@ describe('ingredient modal works correctly', () => {
       cy.contains('Соус фирменный Space Sauce').click();
   
       // Проверяем, что модальное окно открылось
-      cy.get('#modals').should('exist');
-      cy.get('#modals').contains('Соус фирменный Space Sauce').should('exist');
+      cy.get(modalsSelector).should('exist');
+      cy.get(modalsSelector).contains('Соус фирменный Space Sauce').should('exist');
   
       // Закрытие модального окна по клику на оверлей
-      cy.get('[data-cy="overlay"]').click({ force: true });  
+      cy.get(closeButtonSelector).click({ force: true });  
       cy.get('[class^="modal"]').should('not.exist'); 
     });
   });
@@ -81,23 +88,23 @@ describe('ingredient modal works correctly', () => {
         .click();
   
       // Проверка, что ингредиенты добавлены
-      cy.get('[class^="constructor-element"]').contains('Краторная булка N-200i').should('exist');
-      cy.get('[class^="constructor-element"]').contains('Биокотлета из марсианской Магнолии').should('exist');
+      cy.get(constructorElementSelector).contains('Краторная булка N-200i').should('exist');
+      cy.get(constructorElementSelector).contains('Биокотлета из марсианской Магнолии').should('exist');
   
       // Клик на кнопку "Оформить заказ"
       cy.get('button').contains('Оформить заказ').click();
   
       // Проверка открытия модального окна с номером заказа
-      cy.get('#modals').should('exist');
-      cy.get('#modals').contains('Ваш заказ начали готовить').should('exist');
-      cy.get('#modals').contains('65833').should('exist'); // Проверка номера заказа
+      cy.get(modalsSelector).should('exist');
+      cy.get(modalsSelector).contains('Ваш заказ начали готовить').should('exist');
+      cy.get(modalsSelector).contains('65833').should('exist'); // Проверка номера заказа
   
       // Закрытие модального окна
-      cy.get('[data-cy="close-button"]').click();
-      cy.get('#modals').should('not.be.visible');
+      cy.get(closeButtonSelector).click();
+      cy.get(modalsSelector).should('not.be.visible');
   
       // Проверка, что конструктор пуст
-      cy.get('[class^="constructor-element"]').should('not.exist');
+      cy.get(constructorElementSelector).should('not.exist');
     });
   });
     
